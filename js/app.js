@@ -1,3 +1,5 @@
+let dates = [];
+//! TODO: make show all button seable
 const loadAiData = () => {
     const url = "https://openapi.programming-hero.com/api/ai/tools";
     fetch(url)
@@ -18,6 +20,8 @@ const loadAiDetailsById = (id) => {
 };
 
 const diaplayAiData = (ais) => {
+    const spinner = document.getElementById("spinner");
+    spinner.classList.remove("d-none");
     const aiContainer = document.getElementById("ai__container");
     ais.forEach((ai) => {
         const aiDiv = document.createElement("div");
@@ -49,6 +53,15 @@ const diaplayAiData = (ais) => {
                         
         `;
         aiContainer.appendChild(aiDiv);
+
+        // Hideing Spinner
+        spinner.classList.add("d-none");
+
+        // Added Dates To An datesay
+        for (let i = 0; i < 1; i++) {
+            dates.push(ai.published_in);
+        }
+        // console.log(dates);
     });
 };
 
@@ -64,7 +77,7 @@ const showAiDetailsModal = (details) => {
             <h5 class="card-title">
                     ${details.description}
             </h5>
-            <div class="d-flex" > ${showPrice(details?.pricing)}
+            <div class="d-flex mt-3 mb-3" > ${showPrice(details?.pricing)}
             </div>
             <div class="d-flex justify-content-around pt-2">
                 <div>
@@ -100,15 +113,15 @@ const showAiDetailsModal = (details) => {
                     </button>`
             }
             ${
-                details?.input_output_examples == null
+                details?.dates_sortByDate_examples == null
                     ? `<div class="text-danger text-center fw-bold pt-2">No Data Found</div>`
                     : `
                     <div class="card-body text-center">
                         <h5 class="card-title">
-                            ${details?.input_output_examples[0]?.input}
+                            ${details?.dates_sortByDate_examples[0]?.dates}
                         </h5>
                         <p class="card-text">
-                            ${details?.input_output_examples[0]?.output}
+                            ${details?.dates_sortByDate_examples[0]?.sortByDate}
                         </p>
                     </div>
                 `
@@ -151,5 +164,33 @@ const showPrice = (prices) => {
     });
     return p;
 };
+
+//! TODO: Fix sort by date
+// Sort By Date
+document.getElementById("sort__by__date").addEventListener("click", () => {
+    let sortByDate = [];
+
+    // for (var i = 1; i < dates.length; i++)
+    //     for (var j = 0; j < i; j++)
+    //         if (dates[i] < dates[j]) {
+    //             var x = dates[i];
+    //             dates[i] = dates[j];
+    //             dates[j] = x;
+    //         }
+    var inserted;
+    for (var i = 0, ii = dates.length; i < ii; i++) {
+        inserted = false;
+        for (var j = 0, jj = sortByDate.length; j < jj; j++) {
+            if (dates[i] < sortByDate[j]) {
+                inserted = true;
+                sortByDate.splice(j, 0, dates[i]);
+                break;
+            }
+        }
+
+        if (!inserted) sortByDate.push(dates[i]);
+    }
+    // console.log(dates);
+});
 
 loadAiData();
