@@ -11,39 +11,46 @@ const diaplayAiData = (ais) => {
         const aiDiv = document.createElement("div");
         aiDiv.classList.add("col");
         aiDiv.innerHTML = `
-            <div class="card h-100">
-                            <img src="${
-                                ai.image
-                            }" class="card-img-top" alt="..." />
+            <div class="card p-3 h-100">
+                            <img style="height: 250px; border-radius: 15px" src="${ai.image}" class="card-img-top" alt="..." />
                             <div class="card-body">
                                 <h5 class="card-title">Features</h5>
                                 <p id="ai__features" class="card-text">
-                                    ${ai.features.forEach((feature) => {
-                                        const featuresContainer =
-                                            document.getElementById(
-                                                "ai__features"
-                                            );
-                                        const singleAiFeatures =
-                                            document.createElement("ul");
-                                        singleAiFeatures.innerHTML = `
-                                                <li>
-                                                    ${feature}
-                                                </li>
-                                            `;
-                                        featuresContainer.appendChild(
-                                            singleAiFeatures
-                                        );
-                                    })}
+                                    // TODO: Fix loop through Features
+                                    ${ai.features[0]} </br>
+                                    ${ai.features[1]}</br>
+                                    ${ai.features[2]} </br>
+                                    ${ai.features[3]}
                                 </p>
                             </div>
-                            <div class="card-footer">
-                                <small class="text-body-secondary"
-                                    >Last updated 3 mins ago</small
-                                >
+                            <div class="card-footer d-flex justify-content-between align-items-center">
+                                <div><h5 class="card-title ">${ai.name}</h5>
+                                <div class="text-body-secondary"
+                                    >
+                                    🗓
+                                    ${ai.published_in}</div
+                                ></div>
+                                <div style="color: blue; font-size: 46px; cursor: pointer;"> ➡</div>
                             </div>
-                        </div>
+            </div>
+                        
+                        
         `;
         aiContainer.appendChild(aiDiv);
+    });
+};
+
+const loadFeatures = (features) => {
+    features.forEach((feature) => {
+        console.log(feature);
+        const featuresContainer = document.getElementById("ai__features");
+        const singleAiFeatures = document.createElement("ol");
+        singleAiFeatures.innerHTML = `
+            <li>
+                ${feature}
+            </li>
+        `;
+        featuresContainer?.appendChild(singleAiFeatures);
     });
 };
 
