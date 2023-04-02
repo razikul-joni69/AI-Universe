@@ -9,9 +9,9 @@ const loadAiDetailsById = (id) => {
     if (id <= 9) {
         id = `0${id}`;
     }
-    console.log(id);
+    // console.log(id);
     const url = `https://openapi.programming-hero.com/api/ai/tool/${id}`;
-    console.log(url)
+    // console.log(url);
     fetch(url)
         .then((res) => res.json())
         .then((data) => showAiDetailsModal(data.data));
@@ -24,26 +24,26 @@ const diaplayAiData = (ais) => {
         aiDiv.classList.add("col");
         aiDiv.innerHTML = `
             <div class="card p-3 h-100">
-                            <img style="height: 250px; border-radius: 15px" src="${ai.image}" class="card-img-top" alt="..." />
-                            <div class="card-body">
-                                <h5 class="card-title">Features</h5>
-                                <p id="ai__features" class="card-text">
-                                    // TODO: Fix loop through Features
-                                    ${ai.features[0]} </br>
-                                    ${ai.features[1]}</br>
-                                    ${ai.features[2]} </br>
-                                    ${ai.features[3]}
-                                </p>
-                            </div>
-                            <div class="card-footer d-flex justify-content-between align-items-center">
-                                <div><h5 class="card-title ">${ai.name}</h5>
-                                <div class="text-body-secondary"
-                                    >
-                                    🗓
-                                    ${ai.published_in}</div
-                                ></div>
-                                <div onclick="loadAiDetailsById(${ai.id})" data-bs-toggle="modal" data-bs-target="#aiDetails" style="color: blue; font-size: 46px; cursor: pointer;"> ➡</div>
-                            </div>
+                <img style="height: 250px; border-radius: 15px" src="${
+                    ai.image
+                }" class="card-img-top" alt="..." />
+                <div class="card-body">
+                    <h5 class="card-title">Features</h5>
+                    <ol>
+                        ${loadInt(ai?.features)}
+                    </ol>
+                </div>
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                    <div><h5 class="card-title ">${ai.name}</h5>
+                    <div class="text-body-secondary"
+                        >
+                        🗓
+                        ${ai.published_in}</div
+                    ></div>
+                    <div onclick="loadAiDetailsById(${
+                        ai.id
+                    })" data-bs-toggle="modal" data-bs-target="#aiDetails" style="color: blue; font-size: 46px; cursor: pointer;"> ➡</div>
+                </div>
             </div>
                         
                         
@@ -52,9 +52,9 @@ const diaplayAiData = (ais) => {
     });
 };
 
-// Show AI Details
+// Show AI Details Modal
 const showAiDetailsModal = (details) => {
-    console.log(details);
+    // console.log(details);
     const detailsContainer = document.getElementById("modal__content");
     detailsContainer.innerHTML = "";
     const cardContainer = document.createElement("div");
@@ -64,10 +64,21 @@ const showAiDetailsModal = (details) => {
             <h5 class="card-title">
                     ${details.description}
             </h5>
-            <div class="d-flex" >
-                <div style="background-color: white" class="p-3 fw-bold m-1"> ${details?.pricing[0]?.price} ${details?.pricing[0]?.plan}</div>
-                <div style="background-color: white" class="p-3 fw-bold m-1"> ${details?.pricing[1]?.price} ${details?.pricing[1]?.plan}</div>
-                <div style="background-color: white" class="p-3 fw-bold m-1"> ${details?.pricing[2]?.price} ${details?.pricing[2]?.plan}</div>
+            <div class="d-flex" > ${showPrice(details?.pricing)}
+            </div>
+            <div class="d-flex justify-content-around pt-2">
+                <div>
+                    <h2>Features</h2>
+                    <ul>
+                        ${showFeatures(details?.features)}
+                    </ul>
+                </div>
+                <div id="integrations">
+                    <h2>Integrations</h2>
+                    <ul>
+                        ${loadInt(details?.integrations)}
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -90,18 +101,34 @@ const showAiDetailsModal = (details) => {
     `;
     detailsContainer.appendChild(cardContainer);
 };
-const loadFeatures = (features) => {
-    features.forEach((feature) => {
-        console.log(feature);
-        const featuresContainer = document.getElementById("ai__features");
-        const singleAiFeatures = document.createElement("ol");
-        singleAiFeatures.innerHTML = `
-            <li>
-                ${feature}
-            </li>
-        `;
-        featuresContainer?.appendChild(singleAiFeatures);
-    });
+
+// Load Features and Integrations
+function loadInt(int) {
+    // console.log(int)
+    let p = "";
+    for (let i = 0; i < int?.length; i++) {
+        p += `<li>${int[i]}</li>`;
+    }
+    return p;
+}
+
+// Show Modal Details Features
+const showFeatures = (features) => {
+    let p = "";
+    for (const feature in features) {
+        p += `<li>${features[feature].feature_name}</li>`;
+    }
+    return p;
 };
+
+// Showing Price
+const showPrice = (prices) => {
+    let p = "";
+    prices.forEach((price) => {
+        p += `<div style="background-color: white" class="p-3 fw-bold m-1">${price.price} <span class="text-danger">${price.plan} </span></div>`;
+    });
+    return p;
+};
+
 
 loadAiData();
