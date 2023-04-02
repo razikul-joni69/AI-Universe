@@ -10,3 +10,10 @@
     right: -20px;
     cursor: pointer;
 }
+
+
+#accuracy__button {
+    position: absolute;
+    right: 25px;
+    top: 25px;
+}

@@ -88,6 +88,16 @@ const showAiDetailsModal = (details) => {
                 class="card-img-top"
                 alt="..."
             />
+            ${
+                details?.accuracy?.score &&
+                `<button
+                        id="accuracy__button"
+                        type="button"
+                        class="btn btn-danger"
+                    >
+                        ${details?.accuracy?.score} accuracy
+                    </button>`
+            }
             <div class="card-body text-center">
                 <h5 class="card-title">
                     ${details.tool_name}
