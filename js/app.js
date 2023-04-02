@@ -104,8 +104,10 @@ const showAiDetailsModal = (details) => {
 
 // Load Features and Integrations
 function loadInt(int) {
-    // console.log(int)
     let p = "";
+    if (int == null) {
+        p += `<p class="text-danger">No Data Found</p>`;
+    }
     for (let i = 0; i < int?.length; i++) {
         p += `<li>${int[i]}</li>`;
     }
@@ -124,7 +126,10 @@ const showFeatures = (features) => {
 // Showing Price
 const showPrice = (prices) => {
     let p = "";
-    prices.forEach((price) => {
+    if (prices == null) {
+        p += `<div style="background-color: white" class="p-3 fw-bold m-1 text-danger">Free of Cost.</div>`;
+    }
+    prices?.forEach((price) => {
         p += `<div style="background-color: white" class="p-3 fw-bold m-1">${price.price} <span class="text-danger">${price.plan} </span></div>`;
     });
     return p;
