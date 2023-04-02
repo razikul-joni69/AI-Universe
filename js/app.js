@@ -89,8 +89,9 @@ const showAiDetailsModal = (details) => {
                 alt="..."
             />
             ${
-                details?.accuracy?.score &&
-                `<button
+                details?.accuracy?.score == null
+                    ? ""
+                    : `<button
                         id="accuracy__button"
                         type="button"
                         class="btn btn-danger"
@@ -98,14 +99,20 @@ const showAiDetailsModal = (details) => {
                         ${details?.accuracy?.score} accuracy
                     </button>`
             }
-            <div class="card-body text-center">
-                <h5 class="card-title">
-                    ${details.tool_name}
-                </h5>
-                <p class="card-text">
-                    ${details.description}
-                </p>
-            </div>
+            ${
+                details?.input_output_examples == null
+                    ? `<div class="text-danger text-center fw-bold pt-2">No Data Found</div>`
+                    : `
+                    <div class="card-body text-center">
+                        <h5 class="card-title">
+                            ${details?.input_output_examples[0]?.input}
+                        </h5>
+                        <p class="card-text">
+                            ${details?.input_output_examples[0]?.output}
+                        </p>
+                    </div>
+                `
+            }
         </div>
         
     `;
