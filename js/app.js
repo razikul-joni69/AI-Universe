@@ -130,5 +130,4 @@ const showPrice = (prices) => {
     return p;
 };
 
-
 loadAiData();

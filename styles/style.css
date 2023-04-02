@@ -1,0 +1,11 @@
+/* Modal Close Button Styles */
+#close__button {
+    position: absolute;
+    right: 0;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    background-color: #eb2b2b;
+    top: -20px;
+    right: -20px;
+}
