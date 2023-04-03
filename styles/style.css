@@ -22,3 +22,14 @@
 .modal__card {
     width: 50%;
 }
+
+@media only screen and (max-width: 996px) {
+    .modal__card {
+        width: 100%;
+    }
+    #modal__content {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}

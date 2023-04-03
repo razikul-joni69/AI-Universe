@@ -77,7 +77,6 @@ const diaplayAiData = (ais, allData) => {
         for (let i = 0; i < 1; i++) {
             dates.push(ai.published_in);
         }
-        // console.log(dates);
     });
 };
 
@@ -86,15 +85,16 @@ const showAiDetailsModal = (details) => {
     const detailsContainer = document.getElementById("modal__content");
     detailsContainer.innerHTML = "";
     const cardContainer = document.createElement("div");
-    cardContainer.classList.add("d-flex");
+    cardContainer.classList.add("row");
     cardContainer.innerHTML = `
-        <div style="background-color: #fef7f7" class="card p-3 me-4 border border-danger modal__card">
+        <div style="background-color: #fef7f7" class="card p-3 me-4 border border-danger modal__card" class="col">
             <h5 class="card-title">
                     ${details.description}
             </h5>
-            <div class="d-flex mt-3 mb-3" > ${showPrice(details?.pricing)}
+            <div id="pricing__card" class="d-flex flex-wrap mt-3 mb-3">
+            ${showPrice(details?.pricing)}
             </div>
-            <div class="d-flex justify-content-around pt-2">
+            <div class="d-flex flex-wrap justify-content-around pt-2">
                 <div>
                     <h2>Features</h2>
                     <ul>
@@ -110,7 +110,7 @@ const showAiDetailsModal = (details) => {
             </div>
         </div>
 
-        <div class="card p-3 modal__card">
+        <div class="card p-3 modal__card col">
             <img
                 src="${details.image_link[0]}"
                 class="card-img-top"
@@ -186,28 +186,13 @@ const showPrice = (prices) => {
 //! TODO: Fix sort by date
 // Sort By Date
 document.getElementById("sort__by__date").addEventListener("click", () => {
-    let sortByDate = [];
+    dates.sort(function (a, b) {
+        var da = new Date(a).getTime();
+        var db = new Date(b).getTime();
 
-    // for (var i = 1; i < dates.length; i++)
-    //     for (var j = 0; j < i; j++)
-    //         if (dates[i] < dates[j]) {
-    //             var x = dates[i];
-    //             dates[i] = dates[j];
-    //             dates[j] = x;
-    //         }
-    var inserted;
-    for (var i = 0, ii = dates.length; i < ii; i++) {
-        inserted = false;
-        for (var j = 0, jj = sortByDate.length; j < jj; j++) {
-            if (dates[i] < sortByDate[j]) {
-                inserted = true;
-                sortByDate.splice(j, 0, dates[i]);
-                break;
-            }
-        }
-
-        if (!inserted) sortByDate.push(dates[i]);
-    }
+        return da < db ? -1 : da > db ? 1 : 0;
+    });
+    console.log(dates);
 });
 
 // Show All Button Functionality
