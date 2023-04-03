@@ -17,3 +17,8 @@
     right: 25px;
     top: 25px;
 }
+
+/* Modal Cards Styles */
+.modal__card {
+    width: 50%;
+}

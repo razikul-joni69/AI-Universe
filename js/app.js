@@ -1,12 +1,16 @@
 let dates = [];
-//! TODO: make show all button seable
-const loadAiData = () => {
-    const url = "https://openapi.programming-hero.com/api/ai/tools";
-    fetch(url)
-        .then((res) => res.json())
-        .then((data) => diaplayAiData(data.data.tools));
-};
 
+const loadAiData = async (allData) => {
+    const url = "https://openapi.programming-hero.com/api/ai/tools";
+    const res = await fetch(url);
+    const data = await res.json();
+
+    diaplayAiData(data.data.tools, allData);
+    showAll(data.data.tools);
+};
+loadAiData(false);
+
+// Load Ai Details By Id
 const loadAiDetailsById = (id) => {
     if (id <= 9) {
         id = `0${id}`;
@@ -19,11 +23,23 @@ const loadAiDetailsById = (id) => {
         .then((data) => showAiDetailsModal(data.data));
 };
 
-const diaplayAiData = (ais) => {
+const diaplayAiData = (ais, allData) => {
+    const aiContainer = document.getElementById("ai__container");
+    // Show Spinner
     const spinner = document.getElementById("spinner");
     spinner.classList.remove("d-none");
-    const aiContainer = document.getElementById("ai__container");
-    ais.forEach((ai) => {
+
+    // Show and Hide Show All Button
+    const showAll = document.getElementById("show__all");
+    if (allData === true) {
+        aiContainer.innerHTML = "";
+        showAll.classList.add("d-none");
+    } else if (allData === false) {
+        ais = ais.slice(0, 6);
+        showAll.classList.remove("d-none");
+    }
+
+    ais?.forEach((ai) => {
         const aiDiv = document.createElement("div");
         aiDiv.classList.add("col");
         aiDiv.innerHTML = `
@@ -67,13 +83,12 @@ const diaplayAiData = (ais) => {
 
 // Show AI Details Modal
 const showAiDetailsModal = (details) => {
-    // console.log(details);
     const detailsContainer = document.getElementById("modal__content");
     detailsContainer.innerHTML = "";
     const cardContainer = document.createElement("div");
     cardContainer.classList.add("d-flex");
     cardContainer.innerHTML = `
-        <div style="background-color: #fef7f7" class="card p-3 me-4">
+        <div style="background-color: #fef7f7" class="card p-3 me-4 border border-danger modal__card">
             <h5 class="card-title">
                     ${details.description}
             </h5>
@@ -95,7 +110,7 @@ const showAiDetailsModal = (details) => {
             </div>
         </div>
 
-        <div class="card p-3">
+        <div class="card p-3 modal__card">
             <img
                 src="${details.image_link[0]}"
                 class="card-img-top"
@@ -113,15 +128,15 @@ const showAiDetailsModal = (details) => {
                     </button>`
             }
             ${
-                details?.dates_sortByDate_examples == null
+                details?.input_output_examples == null
                     ? `<div class="text-danger text-center fw-bold pt-2">No Data Found</div>`
                     : `
                     <div class="card-body text-center">
                         <h5 class="card-title">
-                            ${details?.dates_sortByDate_examples[0]?.dates}
+                            ${details?.input_output_examples[0]?.input}
                         </h5>
                         <p class="card-text">
-                            ${details?.dates_sortByDate_examples[0]?.sortByDate}
+                            ${details?.input_output_examples[0]?.output}
                         </p>
                     </div>
                 `
@@ -160,7 +175,10 @@ const showPrice = (prices) => {
         p += `<div style="background-color: white" class="p-3 fw-bold m-1 text-danger">Free of Cost.</div>`;
     }
     prices?.forEach((price) => {
-        p += `<div style="background-color: white" class="p-3 fw-bold m-1">${price.price} <span class="text-danger">${price.plan} </span></div>`;
+        p += `
+                <div style="background-color: white" class="p-3 fw-bold m-1">${price.price} 
+                <span class="text-danger">${price.plan} </span></div>
+            `;
     });
     return p;
 };
@@ -190,7 +208,13 @@ document.getElementById("sort__by__date").addEventListener("click", () => {
 
         if (!inserted) sortByDate.push(dates[i]);
     }
-    // console.log(dates);
 });
 
-loadAiData();
+// Show All Button Functionality
+const showAll = (data) => {
+    document
+        .getElementById("show__all__button")
+        .addEventListener("click", () => {
+            diaplayAiData(data, true);
+        });
+};
